@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/new_product_fragment"
+
+            android:title="New Product" />
+        <item
+            android:id="@+id/expiry_dates"
+            android:title="Expiry Date" />
+    </group>
+    <item android:title="Controls">
+        <menu>
+            <item
+                android:id="@id/settings_fragment"
+                android:title="Settings"
+               />
+        </menu>
+    </item>
+
+</menu>

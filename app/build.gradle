@@ -50,5 +50,7 @@ dependencies {
     // Add the dependencies for any other Firebase products you want to use in your app
     // For example, to also use Firebase Authentication
     implementation 'com.google.firebase:firebase-auth:19.3.2'
+    // Material design
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
 
 }

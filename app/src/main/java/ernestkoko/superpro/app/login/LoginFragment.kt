@@ -65,6 +65,8 @@ class LoginFragment : Fragment() {
         viewModel.isCheckEmailAndPassword.observe(viewLifecycleOwner, Observer { isCheckEmailAndPassword ->
             if (isCheckEmailAndPassword){
                 Toast.makeText(requireContext(),"Check the email and password", Toast.LENGTH_LONG).show()
+                mBinding.emailLayout.error = "Check the email"
+                mBinding.passwordLayout.error ="Check password"
             }
         })
 

@@ -1,56 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="regViewModel"
             type="ernestkoko.superpro.app.register.RegisterViewModel" />
 
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".register.RegisterFragment">
 
-    <EditText
-        android:id="@+id/reg_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="@={regViewModel.email}"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:hint="Email" />
-    <EditText
-        android:id="@+id/reg_password1"
-        android:layout_width="0dp"
-        android:text="@={regViewModel.password1}"
-        android:textColorHint="@color/colorAccent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/reg_email"
-        app:layout_constraintStart_toStartOf="@id/reg_email"
-        app:layout_constraintEnd_toEndOf="@id/reg_email"
-        android:hint="Password" />
-    <EditText
-        android:id="@+id/reg_password2"
-        android:layout_width="0dp"
-        android:text="@={regViewModel.password2}"
-        android:textColorHint="@color/colorAccent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/reg_password1"
-        app:layout_constraintStart_toStartOf="@id/reg_password1"
-        app:layout_constraintEnd_toEndOf="@id/reg_password1"
-        android:hint="Password" />
-    <Button
-        android:id="@+id/reg_button"
-        app:layout_constraintTop_toBottomOf="@id/reg_password2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="@{() -> regViewModel.registerUser()}"
-        app:layout_constraintStart_toStartOf="@id/reg_password2"
-        app:layout_constraintEnd_toEndOf="@id/reg_password2"
-        android:text="Register"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".register.RegisterFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:errorEnabled="true"
+            android:id="@+id/email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email:"
+                android:text="@={regViewModel.email}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:errorEnabled="true"
+            android:id="@+id/password1_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/email_layout"
+            app:layout_constraintStart_toStartOf="@id/email_layout"
+            app:layout_constraintTop_toBottomOf="@id/email_layout">
+
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reg_password1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password:"
+            android:text="@={regViewModel.password1}"
+            android:textColorHint="@color/colorAccent"
+             />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            app:errorEnabled="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:id="@+id/password2_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/password1_layout"
+            app:layout_constraintStart_toStartOf="@id/password1_layout"
+            app:layout_constraintTop_toBottomOf="@id/password1_layout">
+
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reg_password2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password:"
+            android:text="@={regViewModel.password2}"
+            android:textColorHint="@color/colorAccent"
+             />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/reg_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> regViewModel.registerUser()}"
+            android:text="Register"
+            app:layout_constraintEnd_toEndOf="@id/password2_layout"
+            app:layout_constraintStart_toStartOf="@id/password2_layout"
+            app:layout_constraintTop_toBottomOf="@id/password2_layout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
