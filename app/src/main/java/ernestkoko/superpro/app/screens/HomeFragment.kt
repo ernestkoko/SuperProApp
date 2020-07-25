@@ -2,32 +2,51 @@ package ernestkoko.superpro.app.screens
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ernestkoko.superpro.app.R
+import ernestkoko.superpro.app.databinding.HomeFragmentBinding
 
 class HomeFragment : Fragment() {
+    private lateinit var mBinding: HomeFragmentBinding
+    private lateinit var viewModel: HomeViewModel
+
 
     companion object {
         fun newInstance() = HomeFragment()
     }
 
-    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.home_fragment, container, false)
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        //tell the binding class about the view model
+        mBinding.homeViewModel = viewModel
+        //listen for when to navigate to new product fragment
+        viewModel.navToNewProduct.observe(viewLifecycleOwner, Observer { navToNewproduct ->
+            if (navToNewproduct){
+                findNavController().navigate(R.id.action_homeFragment_to_newProductFragment)
+                viewModel.doneNavToNewProduct()
+            }
+        })
+
+        return mBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        // TODO: Use the ViewModel
+
+
     }
 
 }

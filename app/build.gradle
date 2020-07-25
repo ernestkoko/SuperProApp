@@ -45,12 +45,17 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     //google analytics
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+   // implementation 'com.google.firebase:firebase-analytics:17.2.2'
 
     // Add the dependencies for any other Firebase products you want to use in your app
     // For example, to also use Firebase Authentication
     implementation 'com.google.firebase:firebase-auth:19.3.2'
     // Material design
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+    //or use Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //firebase storage
+    implementation 'com.google.firebase:firebase-storage-ktx:19.1.1'
+    implementation 'com.google.firebase:firebase-database-ktx:19.3.1'
 
 }
