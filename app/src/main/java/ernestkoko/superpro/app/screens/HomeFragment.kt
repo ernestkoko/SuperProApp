@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.HomeFragmentBinding
 
@@ -32,6 +34,10 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         //tell the binding class about the view model
         mBinding.homeViewModel = viewModel
+
+        mBinding.recyclerView.layoutManager = LinearLayoutManager(requireActivity(),RecyclerView.VERTICAL, false)
+        val adapter = HomeFragmentAdapter()
+        mBinding.recyclerView.adapter = adapter
         //listen for when to navigate to new product fragment
         viewModel.navToNewProduct.observe(viewLifecycleOwner, Observer { navToNewproduct ->
             if (navToNewproduct){

@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/new_product_fragment"
+            android:id="@id/newProductFragment"
 
             android:title="New Product" />
         <item
