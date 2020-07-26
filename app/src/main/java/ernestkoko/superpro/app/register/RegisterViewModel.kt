@@ -46,11 +46,9 @@ class RegisterViewModel : ViewModel() {
     private val _wasEmailSent = MutableLiveData<Boolean>()
     val wasEmailSent: LiveData<Boolean>
         get() = _wasEmailSent
-
-    init {
-
-
-    }
+    private val _showDialog = MutableLiveData<Boolean>()
+    val showDialog: LiveData<Boolean>
+        get() = _showDialog
 
 
     //function that registers new user
@@ -76,6 +74,8 @@ class RegisterViewModel : ViewModel() {
                     Log.i(TAG, "Passwords match")
                     //register the user with the mail and password
                     _doPasswordsMatch.value = true
+                    //show dialog
+                    _showDialog.value = true
                     auth.createUserWithEmailAndPassword(
                         email.value!!.trim(),
                         password1.value!!.trim()
@@ -86,11 +86,16 @@ class RegisterViewModel : ViewModel() {
                             //send verification email to the new user
                             sendVerificationEmail()
                             _wasUserRegistered.value = true
+                            //hide dialog
+                            _showDialog.value = false
+
                         } else {
                             Log.i(TAG, "User Reg: failed")
                             Log.i(TAG, task.exception!!.message)
                             //notify the user the reg failed
                             _wasUserRegistered.value = false
+                            //hide dialog
+                            _showDialog.value = false
                         }
                     }
                 } else {

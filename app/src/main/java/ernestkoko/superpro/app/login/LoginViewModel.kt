@@ -38,6 +38,9 @@ class LoginViewModel : ViewModel() {
     private val _isCheckEmailAndPassword = MutableLiveData<Boolean>()
     val isCheckEmailAndPassword: LiveData<Boolean>
     get() = _isCheckEmailAndPassword
+    private val _showDialog = MutableLiveData<Boolean>()
+    val showDialog: LiveData<Boolean>
+    get() =  _showDialog
 
 
     init {
@@ -82,6 +85,7 @@ class LoginViewModel : ViewModel() {
         if (!password.value?.trim().isNullOrEmpty() && !email.value?.trim().isNullOrEmpty()) {
             //fields are not empty
             _areFieldsEmpty.value = false
+            _showDialog.value = true
             //check if the email has been verified
             auth.signInWithEmailAndPassword(email.value!!.trim(), password.value!!.trim())
                 .addOnCompleteListener { task ->
@@ -94,9 +98,11 @@ class LoginViewModel : ViewModel() {
                             //sign in successful
                             //sign in the user
                             _isUserSignedIn.value = true
+                            _showDialog.value = false
                         }else{
                             //user can not go to home page
                             _isUserSignedIn.value = false
+                            _showDialog.value = false
                         }
                         //  _isUserSignedIn.value = true
                     } else {
@@ -105,6 +111,7 @@ class LoginViewModel : ViewModel() {
                         //sign in failed
                         _isUserSignedIn.value = false
                         _isCheckEmailAndPassword.value = true
+                        _showDialog.value = false
                     }
 
                 }
@@ -124,5 +131,8 @@ class LoginViewModel : ViewModel() {
         }
 
 
+    }
+    fun doneShowingDialog(){
+        _showDialog.value = false
     }
 }

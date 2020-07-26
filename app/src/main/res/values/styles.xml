@@ -102,6 +102,10 @@
         <item name="android:indeterminate">true</item>
         <item name="android:visibility">invisible</item>
     </style>
+    <style name="CustomDialogTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 
 
 </resources>

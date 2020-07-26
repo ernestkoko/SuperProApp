@@ -1,5 +1,6 @@
 package ernestkoko.superpro.app.register
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ class RegisterFragment : Fragment() {
     private lateinit var mUserPassword: EditText
     private lateinit var mRegButton: Button
     private lateinit var mAuth: FirebaseAuth
+    private lateinit var mDialog: Dialog
 
     companion object {
         fun newInstance() = RegisterFragment()
@@ -99,6 +101,14 @@ class RegisterFragment : Fragment() {
             }
 
         })
+        //listen for when to show dialog
+        viewModel.showDialog.observe(viewLifecycleOwner, Observer { showDialog ->
+            if (showDialog) {
+                showProgressDialog()
+            } else {
+                hideDialog()
+            }
+        })
 
         return mBinding.root
     }
@@ -144,6 +154,19 @@ class RegisterFragment : Fragment() {
                 Log.i(TAG, "Verification Mail: Not sent")
             }
         }
+    }
+
+    private fun showProgressDialog() {
+        mDialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar)
+        mDialog.setContentView(R.layout.my_progress_bar)
+        mDialog.setCancelable(false)
+        mDialog.show()
+
+    }
+
+    private fun hideDialog() {
+        mDialog.dismiss()
+
     }
 
 }

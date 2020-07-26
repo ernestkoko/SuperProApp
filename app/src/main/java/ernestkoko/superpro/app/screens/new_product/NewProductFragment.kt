@@ -1,6 +1,8 @@
 package ernestkoko.superpro.app.screens.new_product
 
 import android.app.Activity
+import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -21,6 +23,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.NewProductFragmentBinding
+import ernestkoko.superpro.app.dialog.CustomProgressDialog
+import ernestkoko.superpro.app.dialog.ProgressDialogCustom
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -33,6 +37,10 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
     private val PERM_REQUEST_CODE = 200
     private val SAVE_IMAGE_REQUEST_CODE: Int = 2001
     private val PICK_IMAGE_REQUEST_CODE: Int = 2000
+    private val mCustomDialog = CustomProgressDialog()
+   // private val mProgressDialog = ProgressDialogCustom()
+    private lateinit var mDialog: Dialog
+    
 
     companion object {
         fun newInstance() =
@@ -75,60 +83,92 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
 //                verifyStoragePermission()
 //            }
 //        }
+        //observe when to show progress dialog
+        viewModel.showDialog.observe(viewLifecycleOwner, Observer { showDialog ->
+            if (showDialog) {
+                Log.i(TAG, "Showing Dialog")
+                //mProgressDialog.show(parentFragmentManager,"CustomDialog")
+                showProgressDialog()
+
+
+
+//                mCustomDialog.show(requireContext(),"Uploading, Please wait...")
+//                mCustomDialog.show(requireContext())
+            } else {
+              //  mProgressDialog.dismiss()
+                Log.i(TAG, "Dismissing Dialog")
+               // mCustomDialog.dialog.dismiss()
+                hideDialog()
+
+            }
+
+        })
+
+        //observe if product was inserted
+        viewModel.wasProductInserted.observe(viewLifecycleOwner, Observer { wasProductInserted ->
+            if (wasProductInserted){
+                //alert the user the product was inserted
+                Toast.makeText(requireContext(),"Product was saved", Toast.LENGTH_LONG).show()
+                viewModel.doneInsertingProduct()
+            } else{
+                //alert the user the product failed to save
+                Toast.makeText(requireContext(),"Product failed to save", Toast.LENGTH_LONG).show()
+            }
+        })
 
 
         return mBinding.root
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        //check for the request code
-        if (resultCode == Activity.RESULT_OK) {
-            Log.i(TAG, "Result: OK")
-            //check if the result is ok
-            if (requestCode == PICK_IMAGE_REQUEST_CODE) {
-                Log.i(TAG, "REQUEST CODE = $PICK_IMAGE_REQUEST_CODE")
-                //get the uri of the image
-                var imageUrl: Uri? = data?.data
-                // val imageBitMap = data!!.extras!!.get("data") as Bitmap
-                //display the side indicator to show where the image was got from
-                Picasso.get().setIndicatorsEnabled(true)
-                //load the image selected into the image view
-                Picasso.get().load(imageUrl).fit().centerCrop().into(mBinding.newProductImage)
-                FirebaseStorage.getInstance().reference.child("product_pics").putFile(imageUrl!!)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.i(TAG, "Picture: Inserted into fb")
-                        } else {
-                            Log.i(TAG, task.exception!!.message)
-                        }
-                    }
-                // viewModel.getImageUri(imageUrl)
-                Toast.makeText(context, "Image Saved!", Toast.LENGTH_LONG).show()
-            } else if (requestCode == SAVE_IMAGE_REQUEST_CODE) {
-                Log.i(TAG, "REQUEST CODE = $SAVE_IMAGE_REQUEST_CODE")
-                //get the image uri
-                var imageUrl = data!!.data
-                FirebaseStorage.getInstance().reference.child("product_pics").putFile(imageUrl!!)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            Log.i(TAG, "Picture: Inserted into fb")
-                        } else {
-                            Log.i(TAG, task.exception!!.message)
-                        }
-                    }
-                //display the image on the image view
-                Picasso.get().load(imageUrl).fit().into(mBinding.newProductImage)
-                //  viewModel.getImageUri(imageUrl)
-                //tell the user it has been saved
-                Toast.makeText(context, "Image Saved", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            //toast a message to the user that image is not gotten
-            Toast.makeText(context, "Image not gotten!", Toast.LENGTH_LONG).show()
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        //check for the request code
+//        if (resultCode == Activity.RESULT_OK) {
+//            Log.i(TAG, "Result: OK")
+//            //check if the result is ok
+//            if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+//                Log.i(TAG, "REQUEST CODE = $PICK_IMAGE_REQUEST_CODE")
+//                //get the uri of the image
+//                var imageUrl: Uri? = data?.data
+//                // val imageBitMap = data!!.extras!!.get("data") as Bitmap
+//                //display the side indicator to show where the image was got from
+//                Picasso.get().setIndicatorsEnabled(true)
+//                //load the image selected into the image view
+//                Picasso.get().load(imageUrl).fit().centerCrop().into(mBinding.newProductImage)
+//                FirebaseStorage.getInstance().reference.child("product_pics").putFile(imageUrl!!)
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            Log.i(TAG, "Picture: Inserted into fb")
+//                        } else {
+//                            Log.i(TAG, task.exception!!.message)
+//                        }
+//                    }
+//                // viewModel.getImageUri(imageUrl)
+//                Toast.makeText(context, "Image Saved!", Toast.LENGTH_LONG).show()
+//            } else if (requestCode == SAVE_IMAGE_REQUEST_CODE) {
+//                Log.i(TAG, "REQUEST CODE = $SAVE_IMAGE_REQUEST_CODE")
+//                //get the image uri
+//                var imageUrl = data!!.data
+//                FirebaseStorage.getInstance().reference.child("product_pics").putFile(imageUrl!!)
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            Log.i(TAG, "Picture: Inserted into fb")
+//                        } else {
+//                            Log.i(TAG, task.exception!!.message)
+//                        }
+//                    }
+//                //display the image on the image view
+//                Picasso.get().load(imageUrl).fit().into(mBinding.newProductImage)
+//                //  viewModel.getImageUri(imageUrl)
+//                //tell the user it has been saved
+//                Toast.makeText(context, "Image Saved", Toast.LENGTH_LONG).show()
+//            }
+//        } else {
+//            //toast a message to the user that image is not gotten
+//            Toast.makeText(context, "Image not gotten!", Toast.LENGTH_LONG).show()
+//        }
+//    }
 
     override fun getImagePath(imagePath: Uri) {
         //check if the uri is no empty
@@ -170,8 +210,8 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
             FirebaseStorage.getInstance().reference.child("product_pic").putFile(uri)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val result =  it.result!!.storage.root
-                     Log.i(TAG,  it.result!!.storage.root.toString())
+                        val result = it.result!!.storage.root
+                        Log.i(TAG, it.result!!.storage.root.toString())
 
                     } else {
                     }
@@ -235,6 +275,19 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
 
             }
         }
+
+    }
+
+
+    private fun showProgressDialog() {
+       mDialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar)
+        mDialog.setContentView(R.layout.my_progress_bar)
+        mDialog.setCancelable(false)
+        mDialog.show()
+
+    }
+    private fun hideDialog(){
+        mDialog.dismiss()
 
     }
 

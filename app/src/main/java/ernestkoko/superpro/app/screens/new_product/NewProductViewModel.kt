@@ -38,26 +38,73 @@ class NewProductViewModel : ViewModel() {
     private val _isImageClicked = MutableLiveData<Boolean>()
     val isImageClicked: LiveData<Boolean>
         get() = _isImageClicked
+    private val _showDialog = MutableLiveData<Boolean>()
+    val showDialog: LiveData<Boolean>
+        get() = _showDialog
+    private val _wasProductInserted = MutableLiveData<Boolean>()
+    val wasProductInserted: LiveData<Boolean>
+        get() = _wasProductInserted
 
     fun onAddButtonClicked() {
-        FirebaseStorage.getInstance().reference.child("product_pics").putFile(mImageUri!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+        //show dialog
+        _showDialog.value = true
+        if (mImageUri != null && mImageUri != Uri.EMPTY) {
+            FirebaseStorage.getInstance().reference.child("product_pics")
+                .child(mAuth.currentUser!!.uid)
+                .putFile(mImageUri!!)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
 
-                    val result = task.result!!.uploadSessionUri
-                    Log.i(TAG,"ImageUpload Uri: ${result.toString()}")
-                } else {
-                    Log.i(TAG,"ImageUploadTask: Unsuccessful")
+                        val imageUri = task.result!!.uploadSessionUri
+                        Log.i(TAG, "ImageUpload Uri: ${imageUri.toString()}")
+//                        val product = Product(
+//                            productName.value!!.toString().trim(),
+//                            quantity.value!!.toString().trim(),
+//                            manufacturer.value!!.toString().trim(),
+//                            imageUri.toString()
+//                        )
+//                        Log.i(TAG, "Add Button: Clicked")
+//                        //insert the new product to friebase database
+//                        databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+//                            .setValue(product).addOnCompleteListener { task ->
+//                                if (task.isSuccessful) {
+//                                    Log.i(TAG, "Product: Inserted successfully")
+//                                    _wasProductInserted.value = true
+//                                } else {
+//                                    //task failed
+//                                    Log.i(TAG, "Product: insertion failed")
+//                                    _wasProductInserted.value = false
+//                                }
+//                            }
+
+                    } else {
+                        Log.i(TAG, "ImageUploadTask: Unsuccessful")
+                    }
+                    //remove the dialog
+                    _showDialog.value = false
                 }
-            }
-//        val product = Product(
-//            productName.value!!.toString().trim(),
-//            quantity.value!!.toString().trim(),
-//            manufacturer.value!!.toString().trim()
-//        )
-//        Log.i(TAG, "Add Button: Clicked")
-//        //insert the new product to friebase database
-//        databaseRef.child("product").child(mAuth.currentUser!!.uid).push().setValue(product)
+        } else {
+            val product = Product(
+                productName.value!!.toString().trim(),
+                quantity.value!!.toString().trim(),
+                manufacturer.value!!.toString().trim()
+            )
+            Log.i(TAG, "Add Button: Clicked")
+            //insert the new product to friebase database
+            databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+                .setValue(product).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.i(TAG, "Product: Inserted successfully")
+                        _wasProductInserted.value = true
+                    } else {
+                        //task failed
+                        Log.i(TAG, "Product: insertion failed")
+                        _wasProductInserted.value = false
+                    }
+                }
+
+        }
+
 
     }
 
@@ -76,6 +123,11 @@ class NewProductViewModel : ViewModel() {
 
     //get the image uri
     fun getImageUri(uri: Uri?) {
+        Log.i(TAG, "getImageUri: Called")
         mImageUri = uri
+    }
+
+    fun doneInsertingProduct() {
+        _wasProductInserted.value = false
     }
 }
