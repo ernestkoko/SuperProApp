@@ -49,11 +49,15 @@ class RegisterViewModel : ViewModel() {
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean>
         get() = _showDialog
+    private val _isRegisterUserButtonClicked = MutableLiveData<Boolean>()
+    val isRegisterUserButtonClicked: LiveData<Boolean>
+        get() = _isRegisterUserButtonClicked
 
 
     //function that registers new user
     fun registerUser() {
         Log.i(TAG, "registerUser: Called")
+        _isRegisterUserButtonClicked.value = true
         if (!email.value?.trim().isNullOrEmpty() && !password1.value?.trim().isNullOrEmpty()
             && !password2.value?.trim().isNullOrEmpty()
         ) {

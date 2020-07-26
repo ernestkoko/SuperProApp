@@ -25,6 +25,7 @@ import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.NewProductFragmentBinding
 import ernestkoko.superpro.app.dialog.CustomProgressDialog
 import ernestkoko.superpro.app.dialog.ProgressDialogCustom
+import ernestkoko.superpro.app.utils.HideKeyBoard
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -40,7 +41,7 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
     private val mCustomDialog = CustomProgressDialog()
    // private val mProgressDialog = ProgressDialogCustom()
     private lateinit var mDialog: Dialog
-    
+
 
     companion object {
         fun newInstance() =
@@ -109,10 +110,16 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
             if (wasProductInserted){
                 //alert the user the product was inserted
                 Toast.makeText(requireContext(),"Product was saved", Toast.LENGTH_LONG).show()
-                viewModel.doneInsertingProduct()
+               // viewModel.doneInsertingProduct()
             } else{
                 //alert the user the product failed to save
                 Toast.makeText(requireContext(),"Product failed to save", Toast.LENGTH_LONG).show()
+            }
+        })
+        //listen for when add button is clicked
+        viewModel.isAddButtonClicked.observe(viewLifecycleOwner, Observer { isAddButtonClicked ->
+            if (isAddButtonClicked){
+                HideKeyBoard.hidKeyBoard(this.requireActivity())
             }
         })
 

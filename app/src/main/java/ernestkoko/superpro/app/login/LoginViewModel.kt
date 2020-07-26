@@ -41,6 +41,9 @@ class LoginViewModel : ViewModel() {
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean>
     get() =  _showDialog
+    private val _isLoginButtonClicked = MutableLiveData<Boolean>()
+    val isLoginButtonClicked: LiveData<Boolean>
+    get() = _isLoginButtonClicked
 
 
     init {
@@ -81,6 +84,7 @@ class LoginViewModel : ViewModel() {
     //method for login in user
     fun loginUser() {
         Log.i(TAG, "loginUser: called")
+        _isLoginButtonClicked.value = true
         //check if the fields are empty
         if (!password.value?.trim().isNullOrEmpty() && !email.value?.trim().isNullOrEmpty()) {
             //fields are not empty

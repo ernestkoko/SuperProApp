@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.RegisterFragmentBinding
+import ernestkoko.superpro.app.utils.HideKeyBoard
 
 class RegisterFragment : Fragment() {
     private val TAG = "RegViewModel"
@@ -107,6 +108,12 @@ class RegisterFragment : Fragment() {
                 showProgressDialog()
             } else {
                 hideDialog()
+            }
+        })
+        //listen for when reg new user button is clicked
+        viewModel.isRegisterUserButtonClicked.observe(viewLifecycleOwner, Observer { isRegisterUserButtonCllicked ->
+            if (isRegisterUserButtonCllicked){
+                HideKeyBoard.hidKeyBoard(this.requireActivity())
             }
         })
 

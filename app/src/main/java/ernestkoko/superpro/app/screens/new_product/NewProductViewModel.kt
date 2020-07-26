@@ -19,7 +19,7 @@ class NewProductViewModel : ViewModel() {
 
 
     //product name
-    var productName = MutableLiveData<String>()
+    var productName = MutableLiveData<String?>()
         set(value) {
             productName.value = value.value
         }
@@ -44,11 +44,16 @@ class NewProductViewModel : ViewModel() {
     private val _wasProductInserted = MutableLiveData<Boolean>()
     val wasProductInserted: LiveData<Boolean>
         get() = _wasProductInserted
+    private val _isAddButtonClicked = MutableLiveData<Boolean>()
+    val isAddButtonClicked: LiveData<Boolean>
+        get() = _isAddButtonClicked
 
     fun onAddButtonClicked() {
         //show dialog
         _showDialog.value = true
+        _isAddButtonClicked
         if (mImageUri != null && mImageUri != Uri.EMPTY) {
+            Log.i(TAG, "ImageUri is not null")
             FirebaseStorage.getInstance().reference.child("product_pics")
                 .child(mAuth.currentUser!!.uid)
                 .putFile(mImageUri!!)
@@ -70,10 +75,12 @@ class NewProductViewModel : ViewModel() {
 //                                if (task.isSuccessful) {
 //                                    Log.i(TAG, "Product: Inserted successfully")
 //                                    _wasProductInserted.value = true
+  //                      _showDialog.value = false
 //                                } else {
 //                                    //task failed
 //                                    Log.i(TAG, "Product: insertion failed")
 //                                    _wasProductInserted.value = false
+                     //   _showDialog.value = false
 //                                }
 //                            }
 
@@ -84,6 +91,7 @@ class NewProductViewModel : ViewModel() {
                     _showDialog.value = false
                 }
         } else {
+            Log.i(TAG, "ImageUri: null")
             val product = Product(
                 productName.value!!.toString().trim(),
                 quantity.value!!.toString().trim(),
@@ -96,10 +104,12 @@ class NewProductViewModel : ViewModel() {
                     if (task.isSuccessful) {
                         Log.i(TAG, "Product: Inserted successfully")
                         _wasProductInserted.value = true
+                        _showDialog.value = false
                     } else {
                         //task failed
                         Log.i(TAG, "Product: insertion failed")
                         _wasProductInserted.value = false
+                        _showDialog.value = false
                     }
                 }
 
@@ -127,7 +137,5 @@ class NewProductViewModel : ViewModel() {
         mImageUri = uri
     }
 
-    fun doneInsertingProduct() {
-        _wasProductInserted.value = false
-    }
+
 }
