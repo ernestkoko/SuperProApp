@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="resendEmailViewModel"
+            type="ernestkoko.superpro.app.resend_verification_mail.ResendVerificationEmailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".resend_verification_mail.ResendVerificationEmailFragment">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/resend_email_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/resend_email"
+                android:layout_width="match_parent"
+                android:text="@={resendEmailViewModel.email}"
+                android:layout_height="wrap_content"
+                android:hint="Email:" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/resend_password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="@id/resend_email_layout"
+            app:layout_constraintStart_toStartOf="@id/resend_email_layout"
+            app:layout_constraintTop_toBottomOf="@id/resend_email_layout">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/resend_login_password"
+                android:layout_width="match_parent"
+                android:text="@={resendEmailViewModel.password}"
+                android:layout_height="wrap_content"
+                android:hint="Password:" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/resend_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{()->resendEmailViewModel.resendEmail()}"
+
+            android:text="Resend"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="@id/resend_password_layout"
+            app:layout_constraintStart_toStartOf="@id/resend_password_layout"
+            app:layout_constraintTop_toBottomOf="@id/resend_password_layout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

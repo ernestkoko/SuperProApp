@@ -1,9 +1,6 @@
 package ernestkoko.superpro.app.screens.new_product
 
-import android.app.Activity
 import android.app.Dialog
-import android.app.ProgressDialog
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
@@ -24,7 +21,6 @@ import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.NewProductFragmentBinding
 import ernestkoko.superpro.app.dialog.CustomProgressDialog
-import ernestkoko.superpro.app.dialog.ProgressDialogCustom
 import ernestkoko.superpro.app.utils.HideKeyBoard
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -39,7 +35,8 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
     private val SAVE_IMAGE_REQUEST_CODE: Int = 2001
     private val PICK_IMAGE_REQUEST_CODE: Int = 2000
     private val mCustomDialog = CustomProgressDialog()
-   // private val mProgressDialog = ProgressDialogCustom()
+
+    // private val mProgressDialog = ProgressDialogCustom()
     private lateinit var mDialog: Dialog
 
 
@@ -92,13 +89,12 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
                 showProgressDialog()
 
 
-
 //                mCustomDialog.show(requireContext(),"Uploading, Please wait...")
 //                mCustomDialog.show(requireContext())
             } else {
-              //  mProgressDialog.dismiss()
+                //  mProgressDialog.dismiss()
                 Log.i(TAG, "Dismissing Dialog")
-               // mCustomDialog.dialog.dismiss()
+                // mCustomDialog.dialog.dismiss()
                 hideDialog()
 
             }
@@ -107,19 +103,26 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
 
         //observe if product was inserted
         viewModel.wasProductInserted.observe(viewLifecycleOwner, Observer { wasProductInserted ->
-            if (wasProductInserted){
+            if (wasProductInserted) {
                 //alert the user the product was inserted
-                Toast.makeText(requireContext(),"Product was saved", Toast.LENGTH_LONG).show()
-               // viewModel.doneInsertingProduct()
-            } else{
+                Toast.makeText(requireContext(), "Product was saved", Toast.LENGTH_LONG).show()
+                // viewModel.doneInsertingProduct()
+            } else {
                 //alert the user the product failed to save
-                Toast.makeText(requireContext(),"Product failed to save", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Product failed to save", Toast.LENGTH_LONG).show()
             }
         })
         //listen for when add button is clicked
         viewModel.isAddButtonClicked.observe(viewLifecycleOwner, Observer { isAddButtonClicked ->
-            if (isAddButtonClicked){
+            if (isAddButtonClicked) {
                 HideKeyBoard.hidKeyBoard(this.requireActivity())
+            }
+        })
+        //listen for when fields are empty
+        viewModel.areFieldsEmpty.observe(viewLifecycleOwner, Observer { areFieldsEmpty ->
+            if (areFieldsEmpty) {
+                //alert the user to fill the fields
+                Toast.makeText(requireContext(), "Fill all fields!", Toast.LENGTH_LONG).show()
             }
         })
 
@@ -287,13 +290,14 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
 
 
     private fun showProgressDialog() {
-       mDialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar)
+        mDialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar)
         mDialog.setContentView(R.layout.my_progress_bar)
         mDialog.setCancelable(false)
         mDialog.show()
 
     }
-    private fun hideDialog(){
+
+    private fun hideDialog() {
         mDialog.dismiss()
 
     }

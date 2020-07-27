@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.databinding.ProductListViewBinding
 import ernestkoko.superpro.app.firebase.Product
 
@@ -78,7 +79,22 @@ class HomeFragmentAdapter : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmen
         fun bind(product: Product) {
             binding.productName.text = product.name
             binding.productManufacturer.text = product.manufacturer
+            binding.productQuantity.text = product.quantity
+            showImage(product.image_url!!)
 
+        }
+        private fun showImage(url: String) {
+            Log.i("ShowImage","ShowImage: called")
+            Log.i("ShowImage","ImageUrl: ${url}")
+            if (!url.isNullOrEmpty()) {
+                Log.i("ShowImage","Image Url not null")
+                Picasso.get()
+                    .load(url)
+                    .fit().centerCrop()
+                    .into(binding.productImage)
+            }else{
+                Log.i("ShowImage","Image Url is null")
+            }
         }
 
     }

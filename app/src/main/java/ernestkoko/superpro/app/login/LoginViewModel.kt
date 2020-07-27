@@ -44,6 +44,9 @@ class LoginViewModel : ViewModel() {
     private val _isLoginButtonClicked = MutableLiveData<Boolean>()
     val isLoginButtonClicked: LiveData<Boolean>
     get() = _isLoginButtonClicked
+    private val _isResendVerificationMailClicked = MutableLiveData<Boolean>()
+    val isResendVerificationMailClicked: LiveData<Boolean>
+    get() = _isResendVerificationMailClicked
 
 
     init {
@@ -136,7 +139,10 @@ class LoginViewModel : ViewModel() {
 
 
     }
-    fun doneShowingDialog(){
-        _showDialog.value = false
+    fun resendVerificationMail(){
+        _isResendVerificationMailClicked.value = true
+    }
+    fun doneNavigatingToResendEmail(){
+        _isResendVerificationMailClicked.value = false
     }
 }

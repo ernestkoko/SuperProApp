@@ -86,8 +86,10 @@ class LoginFragment : Fragment() {
         //check to show dialog
         viewModel.showDialog.observe(viewLifecycleOwner, Observer { showDialog ->
             if (showDialog) {
+                //show dialog
                 showProgressDialog()
             } else {
+                //hide the dialog
                 hideDialog()
             }
         })
@@ -98,6 +100,16 @@ class LoginFragment : Fragment() {
                HideKeyBoard.hidKeyBoard(this.requireActivity())
             }
 
+        })
+
+        //listen for when resend verification mail is clicked
+        viewModel.isResendVerificationMailClicked.observe(viewLifecycleOwner, Observer { isResendEmailClicked ->
+            if (isResendEmailClicked){
+                //navigate to resend verification mail fragment
+                findNavController().navigate(R.id.action_loginFragment_to_resendVerificationEmailFragment)
+                //set the live data to false
+                viewModel.doneNavigatingToResendEmail()
+            }
         })
         return mBinding.root
     }

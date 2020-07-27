@@ -19,7 +19,7 @@ class NewProductViewModel : ViewModel() {
 
 
     //product name
-    var productName = MutableLiveData<String?>()
+    var productName = MutableLiveData<String>()
         set(value) {
             productName.value = value.value
         }
@@ -47,73 +47,88 @@ class NewProductViewModel : ViewModel() {
     private val _isAddButtonClicked = MutableLiveData<Boolean>()
     val isAddButtonClicked: LiveData<Boolean>
         get() = _isAddButtonClicked
+    private val _areFieldsEmpty = MutableLiveData<Boolean>()
+    val areFieldsEmpty: LiveData<Boolean>
+    get() = _areFieldsEmpty
 
     fun onAddButtonClicked() {
-        //show dialog
-        _showDialog.value = true
-        _isAddButtonClicked
-        if (mImageUri != null && mImageUri != Uri.EMPTY) {
-            Log.i(TAG, "ImageUri is not null")
-            FirebaseStorage.getInstance().reference.child("product_pics")
-                .child(mAuth.currentUser!!.uid)
-                .putFile(mImageUri!!)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
 
-                        val imageUri = task.result!!.uploadSessionUri
-                        Log.i(TAG, "ImageUpload Uri: ${imageUri.toString()}")
-//                        val product = Product(
-//                            productName.value!!.toString().trim(),
-//                            quantity.value!!.toString().trim(),
-//                            manufacturer.value!!.toString().trim(),
-//                            imageUri.toString()
-//                        )
-//                        Log.i(TAG, "Add Button: Clicked")
-//                        //insert the new product to friebase database
-//                        databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
-//                            .setValue(product).addOnCompleteListener { task ->
-//                                if (task.isSuccessful) {
-//                                    Log.i(TAG, "Product: Inserted successfully")
-//                                    _wasProductInserted.value = true
-  //                      _showDialog.value = false
-//                                } else {
-//                                    //task failed
-//                                    Log.i(TAG, "Product: insertion failed")
-//                                    _wasProductInserted.value = false
-                     //   _showDialog.value = false
-//                                }
-//                            }
+        _isAddButtonClicked.value = true
+        if (!productName.value?.trim().isNullOrEmpty() && !manufacturer.value?.trim()
+                .isNullOrEmpty() && !quantity.value?.trim().isNullOrEmpty()
+        ) {
+            //fields are not empty
+            //show dialog
+            _showDialog.value = true
+            _areFieldsEmpty.value = false
+            if (mImageUri != null && mImageUri != Uri.EMPTY) {
+                Log.i(TAG, "ImageUri is not null")
+                Log.i(TAG,"ImageUrl: ${mImageUri.toString()}")
+                FirebaseStorage.getInstance().reference.child("product_pics")
+                    .child(mAuth.currentUser!!.uid)
+                    .putFile(mImageUri!!)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
 
-                    } else {
-                        Log.i(TAG, "ImageUploadTask: Unsuccessful")
+                            val imageUri = task.result!!.uploadSessionUri
+                            Log.i(TAG, "ImageUpload Uri: ${imageUri.toString()}")
+                        val product = Product(
+                            productName.value!!.toString().trim(),
+                            quantity.value!!.toString().trim(),
+                            manufacturer.value!!.toString().trim(),
+                            imageUri.toString()
+                        )
+                        Log.i(TAG, "Add Button: Clicked")
+                        //insert the new product to friebase database
+                        databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+                            .setValue(product).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    Log.i(TAG, "Product: Inserted successfully")
+                                    _wasProductInserted.value = true
+                                                  _showDialog.value = false
+                                } else {
+                                    //task failed
+                                    Log.i(TAG, "Product: insertion failed")
+                                    _wasProductInserted.value = false
+                               _showDialog.value = false
+                                }
+                            }
+
+                        } else {
+                            Log.i(TAG, "ImageUploadTask: Unsuccessful")
+                        }
+                        //remove the dialog
+                        _showDialog.value = false
                     }
-                    //remove the dialog
-                    _showDialog.value = false
-                }
+            } else {
+                Log.i(TAG, "ImageUri: null")
+                val product = Product(
+                    productName.value!!.toString().trim(),
+                    quantity.value!!.toString().trim(),
+                    manufacturer.value!!.toString().trim()
+                )
+                Log.i(TAG, "Add Button: Clicked")
+                //insert the new product to friebase database
+                databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+                    .setValue(product).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.i(TAG, "Product: Inserted successfully")
+                            _wasProductInserted.value = true
+                            _showDialog.value = false
+                        } else {
+                            //task failed
+                            Log.i(TAG, "Product: insertion failed")
+                            _wasProductInserted.value = false
+                            _showDialog.value = false
+                        }
+                    }
+
+            }
         } else {
-            Log.i(TAG, "ImageUri: null")
-            val product = Product(
-                productName.value!!.toString().trim(),
-                quantity.value!!.toString().trim(),
-                manufacturer.value!!.toString().trim()
-            )
-            Log.i(TAG, "Add Button: Clicked")
-            //insert the new product to friebase database
-            databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
-                .setValue(product).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Log.i(TAG, "Product: Inserted successfully")
-                        _wasProductInserted.value = true
-                        _showDialog.value = false
-                    } else {
-                        //task failed
-                        Log.i(TAG, "Product: insertion failed")
-                        _wasProductInserted.value = false
-                        _showDialog.value = false
-                    }
-                }
-
+            //fields are empty
+            _areFieldsEmpty.value = true
         }
+
 
 
     }
