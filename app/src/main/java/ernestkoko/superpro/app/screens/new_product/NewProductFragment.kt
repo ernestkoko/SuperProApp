@@ -55,6 +55,8 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
             DataBindingUtil.inflate(inflater, R.layout.new_product_fragment, container, false)
         viewModel = ViewModelProvider(this).get(NewProductViewModel::class.java)
         mBinding.newProductViewModel = viewModel
+        //verify storage permission
+        verifyStoragePermission()
 
         //picking image
         viewModel.isImageClicked.observe(viewLifecycleOwner, Observer { isImageViewClicked ->

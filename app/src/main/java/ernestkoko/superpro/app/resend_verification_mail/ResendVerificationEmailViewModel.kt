@@ -29,11 +29,19 @@ class ResendVerificationEmailViewModel : ViewModel() {
     private val _isValidEmail = MutableLiveData<Boolean>()
     val isValidEmail: LiveData<Boolean>
         get() = _isValidEmail
+    private val _isResendEmailButtonClicked = MutableLiveData<Boolean>()
+    val isResendEmailButtonClicked: LiveData<Boolean>
+    get() = _isResendEmailButtonClicked
+    private val _showDialog = MutableLiveData<Boolean>()
+    val showDialog: LiveData<Boolean>
+    get() = _showDialog
 
 
     //fun for resend button
     fun resendEmail() {
+
         Log.i(TAG, "ResendEmail: Called")
+        _isResendEmailButtonClicked.value = true
         //check if fields are empty
         if (!email.value?.trim().isNullOrEmpty() && !password.value?.trim().isNullOrEmpty()) {
             //fields are not empty
@@ -41,6 +49,8 @@ class ResendVerificationEmailViewModel : ViewModel() {
             if (isValidEmail(email.value!!.trim())) {
                 //email is valid
                 _isValidEmail.value = true
+                //show dialog
+                _showDialog.value = true
                 mAuth.signInWithEmailAndPassword(email.value!!, password.value!!)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -49,10 +59,12 @@ class ResendVerificationEmailViewModel : ViewModel() {
                             _isUserLoggedIn.value = true
                             //send the email
                             sendVerificationMail()
+                            _showDialog.value = false
                         } else {
                             Log.i(TAG, "Could not sign in")
                             //log in not successful
                             _isUserLoggedIn.value = false
+                            _showDialog.value = false
                         }
                     }
             } else {
@@ -82,6 +94,10 @@ class ResendVerificationEmailViewModel : ViewModel() {
                 _isEmailSent.value = false
             }
         }
+    }
+    //fun for when email field is clicked
+    fun isEmailFieldClick(){
+        _isResendEmailButtonClicked.value = true
     }
 
     /**

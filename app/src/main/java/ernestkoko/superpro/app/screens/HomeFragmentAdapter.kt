@@ -3,12 +3,13 @@ package ernestkoko.superpro.app.screens
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.databinding.ProductListViewBinding
 import ernestkoko.superpro.app.firebase.Product
 
@@ -26,15 +27,15 @@ class HomeFragmentAdapter : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmen
         mDatabaseRef.child("product").child(mUser.uid)
             .addChildEventListener(object : ChildEventListener {
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                    TODO("Not yet implemented")
+
                 }
 
                 override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
@@ -45,13 +46,12 @@ class HomeFragmentAdapter : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmen
                 }
 
                 override fun onChildRemoved(snapshot: DataSnapshot) {
-                    TODO("Not yet implemented")
+
                 }
 
             })
 
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeFragmentViewHolder {
@@ -69,7 +69,7 @@ class HomeFragmentAdapter : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmen
     }
 
     override fun onBindViewHolder(holder: HomeFragmentViewHolder, position: Int) {
-          holder.bind(mProducts.get(position))
+        holder.bind(mProducts.get(position))
     }
 
 
@@ -83,17 +83,26 @@ class HomeFragmentAdapter : RecyclerView.Adapter<HomeFragmentAdapter.HomeFragmen
             showImage(product.image_url!!)
 
         }
+
         private fun showImage(url: String) {
-            Log.i("ShowImage","ShowImage: called")
-            Log.i("ShowImage","ImageUrl: ${url}")
+            Log.i("ShowImage", "ShowImage: called")
+            Log.i("ShowImage", "ImageUrl: ${url}")
             if (!url.isNullOrEmpty()) {
-                Log.i("ShowImage","Image Url not null")
-                Picasso.get()
-                    .load(url)
-                    .fit().centerCrop()
-                    .into(binding.productImage)
-            }else{
-                Log.i("ShowImage","Image Url is null")
+                Log.i("ShowImage", "Image Url not null")
+//                Picasso.get()
+//                    .load(url)
+//                    .fit()
+//                    .into(binding.productImage)
+                Glide.with(binding.productImage.context).load(url)
+                    .apply(
+                        RequestOptions()
+                            .placeholder(R.drawable.notification_bg)
+                            .error(R.drawable.common_google_signin_btn_icon_light_normal)
+                    )
+
+                    .override(100, Target.SIZE_ORIGINAL).fitCenter().into(binding.productImage)
+            } else {
+                Log.i("ShowImage", "Image Url is null")
             }
         }
 

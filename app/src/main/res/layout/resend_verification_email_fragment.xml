@@ -28,6 +28,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/resend_email"
                 android:layout_width="match_parent"
+                android:onClick="@{()->resendEmailViewModel.isEmailFieldClick()}"
                 android:text="@={resendEmailViewModel.email}"
                 android:layout_height="wrap_content"
                 android:hint="Email:" />

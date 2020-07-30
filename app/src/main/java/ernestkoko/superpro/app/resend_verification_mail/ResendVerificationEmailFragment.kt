@@ -1,5 +1,6 @@
 package ernestkoko.superpro.app.resend_verification_mail
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import ernestkoko.superpro.app.databinding.ResendVerificationEmailFragmentBindin
 
 class ResendVerificationEmailFragment : Fragment() {
     private lateinit var mBinding: ResendVerificationEmailFragmentBinding
+    private lateinit var mDialog: Dialog
 
     companion object {
         fun newInstance() =
@@ -47,8 +49,9 @@ class ResendVerificationEmailFragment : Fragment() {
         //listen for when email or password is not ok
         viewModel.isValidEmail.observe(viewLifecycleOwner, Observer { isEmailValid ->
             if (!isEmailValid) {
-                //email is not valid
-                Toast.makeText(requireContext(), "Email is not valid!", Toast.LENGTH_LONG).show()
+                //set error message to the user
+                mBinding.resendEmailLayout.error = "Email is not valid!"
+
             }
         })
         //listen for when user is logged in
@@ -58,7 +61,7 @@ class ResendVerificationEmailFragment : Fragment() {
                 Toast.makeText(requireContext(), "Could not find the account", Toast.LENGTH_LONG)
                     .show()
                 //set error message to the user
-               mBinding.resendEmailLayout.error ="Check the email and password"
+                mBinding.resendEmailLayout.error = "Check the email and password"
             }
         })
         //listen for when email is sent
@@ -73,7 +76,38 @@ class ResendVerificationEmailFragment : Fragment() {
                 Toast.makeText(requireContext(), "Verification Not Sent!", Toast.LENGTH_LONG).show()
             }
         })
+        //listen for when resend email button is clicked
+        viewModel.isResendEmailButtonClicked.observe(
+            viewLifecycleOwner,
+            Observer { isButtonclicked ->
+                if (isButtonclicked) {
+                    //set the errors to null
+                    mBinding.resendEmailLayout.error = null
+                }
+            })
+        //listen for when to show dialog
+        viewModel.showDialog.observe(viewLifecycleOwner, Observer { showDialog->
+            if (showDialog){
+                //show dialog
+                showProgressDialog()
+            }else{
+                //hide the progress dialog
+                hideDialog()
+            }
+        })
         return mBinding.root
+    }
+    private fun showProgressDialog() {
+        mDialog = Dialog(requireContext(), android.R.style.Theme_Translucent_NoTitleBar)
+        mDialog.setContentView(R.layout.my_progress_bar)
+        mDialog.setCancelable(false)
+        mDialog.show()
+
+    }
+
+    private fun hideDialog() {
+        mDialog.dismiss()
+
     }
 
 
