@@ -37,6 +37,12 @@
         <action
             android:id="@+id/action_homeFragment_to_newProductFragment"
             app:destination="@id/newProductFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/newProductFragment"
@@ -55,5 +61,47 @@
         <action
             android:id="@+id/action_resendVerificationEmailFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="ernestkoko.superpro.app.screens.settings.SettingsFragment"
+        android:label="settings_fragment"
+        tools:layout="@layout/settings_fragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_personalSettingsFragment"
+            app:destination="@id/personalSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalSettingsFragment"
+        android:name="ernestkoko.superpro.app.screens.settings.personal_settings.PersonalSettingsFragment"
+        android:label="personal_settings_fragment"
+        tools:layout="@layout/personal_settings_fragment" >
+        <action
+            android:id="@+id/action_personalSettingsFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="ernestkoko.superpro.app.screens.product_details.ProductDetailsFragment"
+        android:label="product_details_fragment"
+        tools:layout="@layout/product_details_fragment" >
+        <action
+            android:id="@+id/action_productDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_productDetailsFragment_to_edithProductFragment"
+            app:destination="@id/edithProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/edithProductFragment"
+        android:name="ernestkoko.superpro.app.screens.edit_product.EdithProductFragment"
+        android:label="edith_product_fragment"
+        tools:layout="@layout/edith_product_fragment" >
+        <action
+            android:id="@+id/action_edithProductFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>
