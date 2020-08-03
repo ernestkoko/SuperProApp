@@ -1,23 +1,28 @@
 package ernestkoko.superpro.app.login
 
-import android.app.Activity
+
 import android.app.Dialog
 import android.os.Bundle
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+
 import android.widget.Toast
-import androidx.core.content.getSystemService
+
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
+
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+
+
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.LoginFragmentBinding
+
 import ernestkoko.superpro.app.utils.HideKeyBoard
 
 class LoginFragment : Fragment() {
@@ -36,11 +41,18 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.login_fragment, container, false)
+
+
+        // nav controller
+       val navController = findNavController()
+      //  val appBarConfiguration = AppBarConfiguration(navController.graph)
+//       mBinding.loginToolBar.setupWithNavController(navController, appBarConfiguration)
         //initialise view model
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         //set the viewModel to the binding class
         mBinding.loginViewModel = viewModel
         mBinding.setLifecycleOwner(this)
+
 
         // set on click listener to the reg button
         mBinding.loginRegButton.setOnClickListener { view ->
@@ -111,6 +123,8 @@ class LoginFragment : Fragment() {
                 viewModel.doneNavigatingToResendEmail()
             }
         })
+
+
         return mBinding.root
     }
 

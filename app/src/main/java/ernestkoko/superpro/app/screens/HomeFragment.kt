@@ -1,10 +1,14 @@
 package ernestkoko.superpro.app.screens
 
 
+import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,6 +24,7 @@ import ernestkoko.superpro.app.databinding.HomeFragmentBinding
 class HomeFragment : Fragment() {
     private lateinit var mBinding: HomeFragmentBinding
     private lateinit var viewModel: HomeViewModel
+    private val TAG = "HomeFrag"
 
 
     companion object {
@@ -32,17 +37,25 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+        //find the nav controller
+        val navController = findNavController()
+        val drawer = mBinding.drawerLayout
+        val appBarConfig = AppBarConfiguration(setOf(R.id.homeFragment), drawer)
+        //set up the toolbar
+        mBinding.homeToolBar.setupWithNavController(navController, appBarConfig)
+        // mBinding.navView.setupWithNavController(navController)
+
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         //tell the binding class about the view model
         mBinding.homeViewModel = viewModel
         //setup the drawer layout
         //find the navController and set up the tool bar
-        val navController = findNavController()
-        val drawer = mBinding.drawerLayout
+//        val navController = findNavController()
+//        val drawer = mBinding.drawerLayout
 
-       // val appBarConfiguration = AppBarConfiguration(navController.graph, drawer)
-      // .setupWithNavController(navController, appBarConfiguration)
+        // val appBarConfiguration = AppBarConfiguration(navController.graph, drawer)
+        // .setupWithNavController(navController, appBarConfiguration)
         mBinding.navView.setupWithNavController(navController)
 
 
@@ -57,6 +70,24 @@ class HomeFragment : Fragment() {
                 viewModel.doneNavToNewProduct()
             }
         })
+        //observe when logout if clicked
+        viewModel.isLogoutClicked.observe(viewLifecycleOwner, Observer { isLogoutClicked ->
+            if (isLogoutClicked) {
+                //pop up dialog
+                popDialog()
+
+
+                //set the value to false
+                viewModel.doneClickingLogout()
+            }
+        })
+        // This callback will only be called when MyFragment is at least Started.
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            popDialog()
+        }
+
+
 
         return mBinding.root
     }
@@ -66,5 +97,19 @@ class HomeFragment : Fragment() {
 
 
     }
+
+    private fun popDialog() {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Want to log out?")
+            .setPositiveButton("Ok", { dialogInterface: DialogInterface, i: Int ->
+                Log.i(TAG, "Ok: Clicked")
+                //finish the activity
+                requireActivity().finish()
+
+            }).setNegativeButton("Cancel", { dialogInterface: DialogInterface, i: Int ->
+                Log.i(TAG, "Cancel: Clicked")
+            }).show()
+    }
+
 
 }

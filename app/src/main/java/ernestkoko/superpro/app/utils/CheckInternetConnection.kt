@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+
 
 package ernestkoko.superpro.app.utils
 
@@ -7,6 +7,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.net.*
 import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LiveData
 
 
@@ -18,17 +19,17 @@ class CheckInternetConnection(private val context: Context) : LiveData<Boolean>(
     //create a network callback
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun lollipopNetworkRequest() {
-        val requestBuilder = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
-        connectivityManager.registerNetworkCallback(
-            requestBuilder.build(),
-        connectivityManagerCallback())
-
-    }
+//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//    private fun lollipopNetworkRequest() {
+//        val requestBuilder = NetworkRequest.Builder()
+//            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+//            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+//        connectivityManager.registerNetworkCallback(
+//            requestBuilder.build(),
+//        connectivityManagerCallback())
+//
+//    }
 
     //fun that checks if there is connectivity or not
     private fun connectivityManagerCallback(): ConnectivityManager.NetworkCallback {
@@ -57,25 +58,29 @@ class CheckInternetConnection(private val context: Context) : LiveData<Boolean>(
 
     }
 
-    private fun updateNetwork(){
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-    }
+//    private fun updateNetwork(){
+//        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+//    }
 
 
-    private fun checkNetworkState(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val nw      = connectivityManager.activeNetwork ?: return false
-            val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
-            return when {
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-                else -> false
-            }
-        } else {
-            val nwInfo = connectivityManager.activeNetworkInfo ?: return false
-            return nwInfo.isConnected
-        }
-    }
+//    companion object{
+//        fun isConnected(context: Context): Boolean {
+//            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                val nw      = connectivityManager.activeNetwork ?: return false
+//                val actNw = connectivityManager.getNetworkCapabilities(nw) ?: return false
+//                return when {
+//                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+//                    actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+//                    else -> false
+//                }
+//            } else {
+//                val nwInfo = connectivityManager.activeNetworkInfo ?: return false
+//                return nwInfo.isConnected
+//            }
+//        }
+//
+//    }
+
 
 }

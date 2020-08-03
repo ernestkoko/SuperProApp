@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".screens.settings.SettingsFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
+    <data>
+
+        <variable
+            name="settingsViewModel"
+            type="ernestkoko.superpro.app.screens.settings.SettingsViewModel" />
+
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:orientation="vertical"
 
-</FrameLayout>
+        tools:context=".screens.settings.SettingsFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/settings_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp" />
+
+
+        <TextView
+            android:id="@+id/personal_setting"
+            style="@style/TextViewStyle"
+            android:onClick="@{()-> settingsViewModel.onPersonalSettingsClick()}"
+            android:text="@string/personal_settings" />
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Business Settings"
+            style="@style/TextViewStyle"/>
+
+    </LinearLayout>
+</layout>

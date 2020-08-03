@@ -95,7 +95,7 @@ class RegisterViewModel : ViewModel() {
 
                         } else {
                             Log.i(TAG, "User Reg: failed")
-                            Log.i(TAG, task.exception!!.message)
+                            Log.i(TAG, task.exception!!.message.toString())
                             //notify the user the reg failed
                             _wasUserRegistered.value = false
                             //hide dialog
@@ -132,7 +132,7 @@ class RegisterViewModel : ViewModel() {
             } else {
                 //else notify the user the email was not sent
                 Log.i(TAG, " Verification Mail: not sent")
-                Log.i(TAG, task.exception!!.message)
+                Log.i(TAG, task.exception!!.message.toString())
                 _wasEmailSent.value = false
             }
         }

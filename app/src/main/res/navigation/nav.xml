@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="ernestkoko.superpro.app.login.LoginFragment"
-        android:label="login_fragment"
+        android:label="@string/login"
         tools:layout="@layout/login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -23,7 +23,7 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="ernestkoko.superpro.app.register.RegisterFragment"
-        android:label="register_fragment"
+        android:label="@string/register"
         tools:layout="@layout/register_fragment">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="ernestkoko.superpro.app.screens.HomeFragment"
-        android:label="home_fragment"
+        android:label="@string/products"
         tools:layout="@layout/home_fragment">
         <action
             android:id="@+id/action_homeFragment_to_newProductFragment"
@@ -47,7 +47,7 @@
     <fragment
         android:id="@+id/newProductFragment"
         android:name="ernestkoko.superpro.app.screens.new_product.NewProductFragment"
-        android:label="new_product_fragment"
+        android:label="@string/new_product"
         tools:layout="@layout/new_product_fragment">
         <action
             android:id="@+id/action_newProductFragment_to_homeFragment"
@@ -56,7 +56,7 @@
     <fragment
         android:id="@+id/resendVerificationEmailFragment"
         android:name="ernestkoko.superpro.app.resend_verification_mail.ResendVerificationEmailFragment"
-        android:label="resend_verification_email_fragment"
+        android:label="@string/resend_verification"
         tools:layout="@layout/resend_verification_email_fragment" >
         <action
             android:id="@+id/action_resendVerificationEmailFragment_to_loginFragment"
@@ -65,7 +65,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="ernestkoko.superpro.app.screens.settings.SettingsFragment"
-        android:label="settings_fragment"
+        android:label="@string/settings"
         tools:layout="@layout/settings_fragment" >
         <action
             android:id="@+id/action_settingsFragment_to_homeFragment"
@@ -77,7 +77,7 @@
     <fragment
         android:id="@+id/personalSettingsFragment"
         android:name="ernestkoko.superpro.app.screens.settings.personal_settings.PersonalSettingsFragment"
-        android:label="personal_settings_fragment"
+        android:label="@string/personal_settings"
         tools:layout="@layout/personal_settings_fragment" >
         <action
             android:id="@+id/action_personalSettingsFragment_to_settingsFragment"
@@ -86,22 +86,22 @@
     <fragment
         android:id="@+id/productDetailsFragment"
         android:name="ernestkoko.superpro.app.screens.product_details.ProductDetailsFragment"
-        android:label="product_details_fragment"
+        android:label="@string/product_details"
         tools:layout="@layout/product_details_fragment" >
         <action
             android:id="@+id/action_productDetailsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
             android:id="@+id/action_productDetailsFragment_to_edithProductFragment"
-            app:destination="@id/edithProductFragment" />
+            app:destination="@id/editProductFragment" />
     </fragment>
     <fragment
-        android:id="@+id/edithProductFragment"
-        android:name="ernestkoko.superpro.app.screens.edit_product.EdithProductFragment"
-        android:label="edith_product_fragment"
+        android:id="@+id/editProductFragment"
+        android:name="ernestkoko.superpro.app.screens.edit_product.EditProductFragment"
+        android:label="@string/edit_product"
         tools:layout="@layout/edith_product_fragment" >
         <action
-            android:id="@+id/action_edithProductFragment_to_productDetailsFragment"
+            android:id="@+id/action_editProductFragment_to_productDetailsFragment"
             app:destination="@id/productDetailsFragment" />
     </fragment>
 </navigation>

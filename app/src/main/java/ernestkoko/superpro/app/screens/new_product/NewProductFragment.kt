@@ -16,6 +16,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
@@ -53,6 +55,10 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
     ): View? {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.new_product_fragment, container, false)
+
+        //find nav controller
+        val navController = findNavController()
+        mBinding.newProductToolBar.setupWithNavController(navController)
         viewModel = ViewModelProvider(this).get(NewProductViewModel::class.java)
         mBinding.newProductViewModel = viewModel
         //verify storage permission

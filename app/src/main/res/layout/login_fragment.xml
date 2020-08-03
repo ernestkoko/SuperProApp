@@ -16,16 +16,23 @@
         android:layout_height="match_parent"
         tools:context=".login.LoginFragment">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email_layout"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/newProduct_tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:errorEnabled="true"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Login" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email_layout"
+            style="@style/EditTextLayoutStyle2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newProduct_tool_bar">
 
 
             <com.google.android.material.textfield.TextInputEditText
@@ -41,11 +48,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:errorEnabled="true"
+            style="@style/EditTextLayoutStyle2"
             app:layout_constraintEnd_toEndOf="@id/email_layout"
             app:layout_constraintStart_toStartOf="@id/email_layout"
             app:layout_constraintTop_toBottomOf="@id/email_layout">
@@ -81,20 +84,33 @@
             app:layout_constraintTop_toBottomOf="@id/login_button" />
 
         <TextView
-            android:id="@+id/resend_verification_email"
+            android:id="@+id/reset_password"
+            style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Resend Verification Email?"
+            android:text="@string/forgot_password_reset"
+            android:onClick="@{()-> loginViewModel.resetPassword()}"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/dimen_24sp"
+            android:textSize="@dimen/dp_16_dim"
             android:textStyle="italic"
-            android:onClick="@{() -> loginViewModel.resendVerificationMail()}"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/login_reg_button" />
 
+        <TextView
+            android:id="@+id/resend_verification_email"
+            style="@style/TextViewStyle"
+            android:onClick="@{() -> loginViewModel.resendVerificationMail()}"
+            android:text="@string/resend_verification_email"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/dp_16_dim"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/reset_password"
+            app:layout_constraintStart_toStartOf="@id/reset_password"
+            app:layout_constraintTop_toBottomOf="@id/reset_password" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

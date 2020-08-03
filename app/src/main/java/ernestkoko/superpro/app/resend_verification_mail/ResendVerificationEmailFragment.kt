@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.setupWithNavController
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.ResendVerificationEmailFragmentBinding
 
@@ -35,6 +36,9 @@ class ResendVerificationEmailFragment : Fragment() {
             container,
             false
         )
+        //nav controller
+        val navController = findNavController()
+        mBinding.resendVerificationToolBar.setupWithNavController(navController)
         viewModel = ViewModelProvider(this).get(ResendVerificationEmailViewModel::class.java)
         //sets the view model
         mBinding.resendEmailViewModel = viewModel

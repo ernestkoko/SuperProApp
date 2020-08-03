@@ -39,6 +39,8 @@ class NewProductViewModel : ViewModel() {
         set(value) {
             quantity.value = value.value
         }
+
+
     private val _isImageClicked = MutableLiveData<Boolean>()
     val isImageClicked: LiveData<Boolean>
         get() = _isImageClicked
@@ -114,14 +116,14 @@ class NewProductViewModel : ViewModel() {
                                 }
 
                         } else {
-                            Log.i(TAG, task.exception?.message)
+                            Log.i(TAG, task.exception?.message.toString())
 
                             Log.i(TAG, "ImageUploadTask: Unsuccessful")
                         }
                         // remove the dialog
                         _showDialog.value = false
                     }.addOnFailureListener {
-                        Log.i(TAG, it.message)
+                        Log.i(TAG, it.message.toString())
                         //remove the dialog
                         _showDialog.value = false
 

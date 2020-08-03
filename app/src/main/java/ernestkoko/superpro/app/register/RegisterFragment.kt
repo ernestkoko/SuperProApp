@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import ernestkoko.superpro.app.R
@@ -40,6 +42,10 @@ class RegisterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.register_fragment, container, false)
+        //nav controller
+        val navController = findNavController()
+      //  val appBarConfig = AppBarConfiguration(navController.graph)
+        mBinding.registrationToolBar.setupWithNavController(navController)
         //initialise the auth
         mAuth = FirebaseAuth.getInstance()
 

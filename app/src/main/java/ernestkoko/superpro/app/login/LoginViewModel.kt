@@ -47,6 +47,10 @@ class LoginViewModel : ViewModel() {
     private val _isResendVerificationMailClicked = MutableLiveData<Boolean>()
     val isResendVerificationMailClicked: LiveData<Boolean>
     get() = _isResendVerificationMailClicked
+    private val _isResetPasswordClicked = MutableLiveData<Boolean>()
+    val isResetPasswordClicked:LiveData<Boolean>
+    get() = _isResetPasswordClicked
+
 
 
     init {
@@ -114,7 +118,7 @@ class LoginViewModel : ViewModel() {
                         //  _isUserSignedIn.value = true
                     } else {
                         Log.i(TAG, "User: Not SignedIn")
-                        Log.i(TAG, task.exception!!.message)
+                        Log.i(TAG, task.exception!!.message.toString())
                         //sign in failed
                         _isUserSignedIn.value = false
                         _isCheckEmailAndPassword.value = true
@@ -144,5 +148,16 @@ class LoginViewModel : ViewModel() {
     }
     fun doneNavigatingToResendEmail(){
         _isResendVerificationMailClicked.value = false
+    }
+
+    //fun called when reset password is pressed
+    fun resetPassword(){
+        Log.i(TAG,"ResetPassword: Called")
+        //set the value to true
+        _isResetPasswordClicked.value = true
+    }
+    fun doneClickingResetPassword(){
+        //set the value to false
+        _isResetPasswordClicked.value = false
     }
 }

@@ -12,6 +12,9 @@ class HomeViewModel : ViewModel() {
     private val _navToNewProduct = MutableLiveData<Boolean>()
     val navToNewProduct: LiveData<Boolean>
     get() = _navToNewProduct
+    private val _isLogoutClicked = MutableLiveData<Boolean>()
+    val isLogoutClicked: LiveData<Boolean>
+    get() = _isLogoutClicked
 
     fun onFabClicked(){
         Log.i(TAG, "Fab: clicked")
@@ -20,5 +23,13 @@ class HomeViewModel : ViewModel() {
     fun doneNavToNewProduct(){
         Log.i(TAG,"Done nav to new Prod Frag")
         _navToNewProduct.value = false
+    }
+    //fun called when logout is clicked
+    fun isLogoutLayoutClicked(){
+
+        _isLogoutClicked.value = true
+    }
+    fun doneClickingLogout(){
+        _isLogoutClicked.value = false
     }
 }

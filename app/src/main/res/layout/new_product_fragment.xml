@@ -19,10 +19,7 @@
         >
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/product_tool_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/newProduct_tool_bar"
             app:title="@string/app_name"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"

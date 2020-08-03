@@ -1,46 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="resendEmailViewModel"
             type="ernestkoko.superpro.app.resend_verification_mail.ResendVerificationEmailViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".resend_verification_mail.ResendVerificationEmailFragment">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/resend_verification_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Resend Verification Email" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/resend_email_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:errorEnabled="true"
+           style="@style/EditTextLayoutStyle2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/resend_verification_tool_bar">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/resend_email"
                 android:layout_width="match_parent"
-                android:onClick="@{()->resendEmailViewModel.isEmailFieldClick()}"
-                android:text="@={resendEmailViewModel.email}"
                 android:layout_height="wrap_content"
-                android:hint="Email:" />
+                android:hint="Email:"
+                android:onClick="@{()->resendEmailViewModel.isEmailFieldClick()}"
+                android:text="@={resendEmailViewModel.email}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/resend_password_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:errorEnabled="true"
+            style="@style/EditTextLayoutStyle2"
             app:layout_constraintEnd_toEndOf="@id/resend_email_layout"
             app:layout_constraintStart_toStartOf="@id/resend_email_layout"
             app:layout_constraintTop_toBottomOf="@id/resend_email_layout">
@@ -49,9 +54,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/resend_login_password"
                 android:layout_width="match_parent"
-                android:text="@={resendEmailViewModel.password}"
                 android:layout_height="wrap_content"
-                android:hint="Password:" />
+                android:hint="Password:"
+                android:text="@={resendEmailViewModel.password}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
