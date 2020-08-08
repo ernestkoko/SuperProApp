@@ -37,20 +37,19 @@ class LoginViewModel : ViewModel() {
         get() = _isUserSignedIn
     private val _isCheckEmailAndPassword = MutableLiveData<Boolean>()
     val isCheckEmailAndPassword: LiveData<Boolean>
-    get() = _isCheckEmailAndPassword
+        get() = _isCheckEmailAndPassword
     private val _showDialog = MutableLiveData<Boolean>()
     val showDialog: LiveData<Boolean>
-    get() =  _showDialog
+        get() = _showDialog
     private val _isLoginButtonClicked = MutableLiveData<Boolean>()
     val isLoginButtonClicked: LiveData<Boolean>
-    get() = _isLoginButtonClicked
+        get() = _isLoginButtonClicked
     private val _isResendVerificationMailClicked = MutableLiveData<Boolean>()
     val isResendVerificationMailClicked: LiveData<Boolean>
-    get() = _isResendVerificationMailClicked
+        get() = _isResendVerificationMailClicked
     private val _isResetPasswordClicked = MutableLiveData<Boolean>()
-    val isResetPasswordClicked:LiveData<Boolean>
-    get() = _isResetPasswordClicked
-
+    val isResetPasswordClicked: LiveData<Boolean>
+        get() = _isResetPasswordClicked
 
 
     init {
@@ -62,7 +61,6 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun setUpAuthStateListener() {
-
         Log.d(TAG, "setupFirebaseAuth: started.");
         mAuthStateListener = FirebaseAuth.AuthStateListener { firebaseAuth ->
 
@@ -103,14 +101,17 @@ class LoginViewModel : ViewModel() {
                     if (task.isSuccessful) {
                         Log.i(TAG, "User: Signed in")
                         //check the auth state of the user
-                        setUpAuthStateListener()
+                        mUser = auth.currentUser
+                        // setUpAuthStateListener()
                         //check if the email is verified
                         if (mUser!!.isEmailVerified) {
+                            _isEmailVerified.value = true
                             //sign in successful
                             //sign in the user
                             _isUserSignedIn.value = true
                             _showDialog.value = false
-                        }else{
+                        } else {
+                            _isEmailVerified.value = false
                             //user can not go to home page
                             _isUserSignedIn.value = false
                             _showDialog.value = false
@@ -143,20 +144,23 @@ class LoginViewModel : ViewModel() {
 
 
     }
-    fun resendVerificationMail(){
+
+    fun resendVerificationMail() {
         _isResendVerificationMailClicked.value = true
     }
-    fun doneNavigatingToResendEmail(){
+
+    fun doneNavigatingToResendEmail() {
         _isResendVerificationMailClicked.value = false
     }
 
     //fun called when reset password is pressed
-    fun resetPassword(){
-        Log.i(TAG,"ResetPassword: Called")
+    fun resetPassword() {
+        Log.i(TAG, "ResetPassword: Called")
         //set the value to true
         _isResetPasswordClicked.value = true
     }
-    fun doneClickingResetPassword(){
+
+    fun doneClickingResetPassword() {
         //set the value to false
         _isResetPasswordClicked.value = false
     }

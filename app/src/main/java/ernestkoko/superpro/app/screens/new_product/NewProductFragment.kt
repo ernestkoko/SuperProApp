@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.NewProductFragmentBinding
 import ernestkoko.superpro.app.dialog.CustomProgressDialog
-import ernestkoko.superpro.app.utils.HideKeyBoard
+import ernestkoko.superpro.app.utils.KeyBoard
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -123,7 +123,7 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
         //listen for when add button is clicked
         viewModel.isAddButtonClicked.observe(viewLifecycleOwner, Observer { isAddButtonClicked ->
             if (isAddButtonClicked) {
-                HideKeyBoard.hidKeyBoard(this.requireActivity())
+                KeyBoard.hidKeyBoard(this.requireActivity())
             }
         })
         //listen for when fields are empty

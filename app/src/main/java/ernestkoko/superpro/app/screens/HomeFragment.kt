@@ -18,6 +18,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.HomeFragmentBinding
 
@@ -37,6 +40,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.home_fragment, container, false)
+       //telling the firebase to persist data offline
+//        Firebase.database.setPersistenceEnabled(true)
         //find the nav controller
         val navController = findNavController()
         val drawer = mBinding.drawerLayout
@@ -99,10 +104,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun popDialog() {
-        val dialog = AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext())
             .setTitle("Want to log out?")
             .setPositiveButton("Ok", { dialogInterface: DialogInterface, i: Int ->
                 Log.i(TAG, "Ok: Clicked")
+                //log out the user
+                FirebaseAuth.getInstance().signOut()
                 //finish the activity
                 requireActivity().finish()
 

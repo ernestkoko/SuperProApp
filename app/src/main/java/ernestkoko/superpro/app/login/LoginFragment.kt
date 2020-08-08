@@ -17,20 +17,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 
 
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.LoginFragmentBinding
 
-import ernestkoko.superpro.app.utils.HideKeyBoard
+
+import ernestkoko.superpro.app.utils.KeyBoard
 
 class LoginFragment : Fragment() {
     private val TAG = "LogInFrag"
     private lateinit var mBinding: LoginFragmentBinding
     private lateinit var viewModel: LoginViewModel
     private lateinit var mDialog: Dialog
-
     companion object {
         fun newInstance() = LoginFragment()
     }
@@ -99,7 +98,8 @@ class LoginFragment : Fragment() {
         viewModel.showDialog.observe(viewLifecycleOwner, Observer { showDialog ->
             if (showDialog) {
                 //show dialog
-                showProgressDialog()
+
+             showProgressDialog()
             } else {
                 //hide the dialog
                 hideDialog()
@@ -109,7 +109,7 @@ class LoginFragment : Fragment() {
         //listen for when the login button is clicked
         viewModel.isLoginButtonClicked.observe(viewLifecycleOwner, Observer { isLoginButtonClicked ->
             if (isLoginButtonClicked){
-               HideKeyBoard.hidKeyBoard(this.requireActivity())
+               KeyBoard.hidKeyBoard(this.requireActivity())
             }
 
         })

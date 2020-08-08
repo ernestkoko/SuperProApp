@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <data>
+
         <variable
             name="personalSettingsViewModel"
             type="ernestkoko.superpro.app.screens.settings.personal_settings.PersonalSettingsViewModel" />
     </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".screens.settings.personal_settings.PersonalSettingsFragment">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/personal_setting_tool_bar"
-        app:title="Personal Settings"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:id="@+id/profile_name_input_layout"
-       app:errorEnabled="true"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".screens.settings.personal_settings.PersonalSettingsFragment">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/personal_setting_tool_bar"
             android:layout_width="match_parent"
-            android:inputType="textPersonName"
-            android:layout_height="match_parent"
-            android:hint="Profile Name" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:id="@+id/profile_phone_input_layout"
-        app:errorEnabled="true"
-        android:layout_height="wrap_content">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:title="Personal Settings" />
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.google.android.material.textfield.TextInputLayout
+
+            android:id="@+id/profile_name_input_layout"
+            style="@style/EditTextLayoutStyle2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Profile Name"
+                android:inputType="textCapWords|textPersonName" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/profile_phone_input_layout"
+            style="@style/EditTextLayoutStyle2">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Phone Number"
+                android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/personal_pic_image_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inputType="phone"
-            android:hint="Phone Number" />
-    </com.google.android.material.textfield.TextInputLayout>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_deault_pic"/>
+            android:layout_height="100dp"
+            android:onClick="@{() -> personalSettingsViewModel.personalImageClicked()}"
+            android:src="@drawable/ic_deault_pic" />
 
 
-</LinearLayout>
+    </LinearLayout>
 </layout>
