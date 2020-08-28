@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.HomeFragmentBinding
 
@@ -59,6 +60,7 @@ class HomeFragment : Fragment() {
 //        val navController = findNavController()
 //        val drawer = mBinding.drawerLayout
 
+
         // val appBarConfiguration = AppBarConfiguration(navController.graph, drawer)
         // .setupWithNavController(navController, appBarConfiguration)
         mBinding.navView.setupWithNavController(navController)
@@ -91,6 +93,13 @@ class HomeFragment : Fragment() {
             // Handle the back button event
             popDialog()
         }
+        viewModel.prod.observe(viewLifecycleOwner, Observer {
+            it?.let {
+               adapter.submitList(it)
+            }
+        })
+
+
 
 
 

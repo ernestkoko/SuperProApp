@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable
+            name="product"
+            type="ernestkoko.superpro.app.firebase.Product" />
 
     </data>
 
@@ -30,6 +33,7 @@
             android:text="Product Name"
             android:textAllCaps="false"
             android:maxLines="1"
+            app:productName="@{product}"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:textSize="19sp"
             android:textStyle="italic|bold"
@@ -44,6 +48,7 @@
             android:id="@+id/product_manufacturer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:productManufacturer="@{product}"
 
             android:text="Manufacturer"
             android:textAllCaps="false"
@@ -62,6 +67,7 @@
             android:layout_marginEnd="@dimen/margin_8dp"
             android:text="Quantity"
             android:textSize="15sp"
+            app:prodQuantity="@{product}"
             android:textStyle="italic|bold"
             app:layout_constraintBottom_toBottomOf="@id/product_manufacturer"
             app:layout_constraintEnd_toEndOf="parent"

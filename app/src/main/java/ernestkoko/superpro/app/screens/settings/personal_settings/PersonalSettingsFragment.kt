@@ -4,25 +4,37 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
-import android.database.DatabaseUtils
-import androidx.lifecycle.ViewModelProviders
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.squareup.picasso.Picasso
 import ernestkoko.superpro.app.R
 import ernestkoko.superpro.app.databinding.PersonalSettingsFragmentBinding
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 class PersonalSettingsFragment : Fragment() {
     private lateinit var mBinding: PersonalSettingsFragmentBinding
     private val TAG = "PersonalSetFrag"
     private val CAMERA_REQUEST_CODE = 1000
+    private val PICK_FILE_REQUEST_CODE = 1001
+    private var mStoragePermissions: Boolean = false
+    private val PERM_REQUEST_CODE = 200
 
     companion object {
         fun newInstance() =
@@ -35,25 +47,34 @@ class PersonalSettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mBinding = DataBindingUtil.inflate(inflater, R.layout.personal_settings_fragment, container, false)
+        mBinding =
+            DataBindingUtil.inflate(inflater, R.layout.personal_settings_fragment, container, false)
+        //verify permission
+        verifyStoragePermission()
         //find the nav controller
         val navController = findNavController()
         //set up the upper left arrow
         mBinding.personalSettingToolBar.setupWithNavController(navController)
-       mBinding.personalSettingToolBar.inflateMenu(R.menu.personal_settings_menu)
+        mBinding.personalSettingToolBar.inflateMenu(R.menu.personal_settings_menu)
 
-       //initialise the view model
+        //initialise the view model
         viewModel = ViewModelProvider(this).get(PersonalSettingsViewModel::class.java)
         //connect the view model
         mBinding.personalSettingsViewModel = viewModel
         //observe when image view is clicked
         viewModel.isImageViewClicked.observe(viewLifecycleOwner, Observer { isImageClicked ->
-            if (isImageClicked){
-                Log.i(TAG,"ImageView:Clicked")
-                //get a dialog
-                popUpDialog()
-                //set the observable field to false
-                viewModel.doneClickingImageView()
+            if (isImageClicked) {
+                if (mStoragePermissions) {
+                    Log.i(TAG, "ImageView:Clicked")
+                    //get a dialog
+                    popUpDialog()
+                    //set the observable field to false
+                    viewModel.doneClickingImageView()
+                } else {
+                    //verify permission
+                    verifyStoragePermission()
+                    viewModel.doneClickingImageView()
+                }
 
             }
         })
@@ -74,16 +95,19 @@ class PersonalSettingsFragment : Fragment() {
                 startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
             }).setNegativeButton("Memory", { dialogInt: DialogInterface, i: Int ->
                 Log.i(TAG, "Memory: Clicked")
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "image/*"
+                startActivityForResult(intent, PICK_FILE_REQUEST_CODE)
             }).show()
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return super.onOptionsItemSelected(item)
-     when(item.itemId){
-        // R.id.save_personal_details
+        when (item.itemId) {
+            // R.id.save_personal_details
 
-     }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -94,13 +118,76 @@ class PersonalSettingsFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAMERA_REQUEST_CODE){
-            Log.i(TAG,"Data: from camera")
-            if (resultCode == Activity.RESULT_OK){
-                Log.i(TAG, data!!.extras.toString())
-                Log.i(TAG,"Camera: result is ok")
+        if (requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Log.i(TAG, "Data: from camera")
+            val camBitmap = data!!.extras!!.get("data") as Bitmap
+            val imageUri = convertBitmapToUri(camBitmap)
+            Log.i(TAG, camBitmap.toString())
+            Picasso.get().load(imageUri).placeholder(R.drawable.ic_human_pic)
+                .error(R.drawable.ic_human_pic).centerCrop().into(mBinding.personalPicImageView)
+
+        }else if (requestCode == PICK_FILE_REQUEST_CODE && resultCode ==Activity.RESULT_OK){
+            Log.i(TAG, "Mem: Result ok")
+            val imageUri = data?.data
+            Log.i(TAG, imageUri.toString())
+            Picasso.get().load(imageUri).placeholder(R.drawable.ic_human_pic)
+                .error(R.drawable.ic_human_pic).into(mBinding.personalPicImageView)
+        }
+    }
+    /**
+     * converts bitmap to uri and return the uri
+     * @param bitmap is the input bitmap
+     */
+    private fun convertBitmapToUri(bitmap: Bitmap): Uri {
+        val file = File(requireContext().cacheDir, "ImageFile")
+        file.delete() // delete in case it exists
+        file.createNewFile()
+        val outputStream = file.outputStream()
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
+        outputStream.write(byteArray)
+        outputStream.flush()
+        outputStream.close()
+        byteArrayOutputStream.close()
+        val uri = file.toURI().toString()
+        //return the uri
+        return Uri.parse(uri)
+
+    }
+
+    /**
+     * method for verifying if the user has granted the required permissions
+     */
+    private fun verifyStoragePermission() {
+        Log.i("NewProdFrag", "verifyStoragePermission called")
+        //arrays of Strings of permission required
+        val permissions = arrayOf(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.CAMERA
+        )
+        // check if the Phone's SDK is equal to or greater than version M
+        //because from M and greater requires user to grant permission when it is needed and not
+        //the app is being installed
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //check if permissions have been granted
+            if (requireContext().checkSelfPermission(permissions[0]) == PackageManager.PERMISSION_GRANTED
+                && requireContext().checkSelfPermission(permissions[1]) == PackageManager.PERMISSION_GRANTED
+                && requireContext().checkSelfPermission(permissions[2]) == PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.i(TAG, "Permissions granted: Setting mStoragePermissions to true")
+                //if granted
+                mStoragePermissions = true
+
+            } else {
+                Log.i("NewProdFrag", "VerifyPermissions: Asking user for permission")
+                //if not granted, request for permissions
+                ActivityCompat.requestPermissions(requireActivity(), permissions, PERM_REQUEST_CODE)
+
             }
         }
+
     }
 
 }
