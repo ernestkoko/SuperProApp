@@ -59,5 +59,6 @@
     <string name="edit_product">Edit Product</string>
     <string name="resend_verification_email">Resend Verification Email?</string>
     <string name="forgot_password_reset">Forgot password? Reset</string>
+    <string name="delete">Delete</string>
 
 </resources>

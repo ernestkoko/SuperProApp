@@ -11,11 +11,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.app.ActivityCompat
+import androidx.core.view.forEach
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -53,9 +52,32 @@ class PersonalSettingsFragment : Fragment() {
         verifyStoragePermission()
         //find the nav controller
         val navController = findNavController()
+       //get the tool bar from xml
+        val toolBar = mBinding.personalSettingToolBar
         //set up the upper left arrow
-        mBinding.personalSettingToolBar.setupWithNavController(navController)
-        mBinding.personalSettingToolBar.inflateMenu(R.menu.personal_settings_menu)
+        toolBar.setupWithNavController(navController)
+       //get the menu from the tool bar
+        val me = toolBar.menu
+        //iterate through the menu to pick each item
+        me.forEach {
+            Log.i(TAG, it.itemId.toString())
+            if (it.itemId == R.id.save_personal_details){
+                Log.i(TAG, "Save picked")
+                it.setOnMenuItemClickListener(object : MenuItem.OnMenuItemClickListener{
+                    override fun onMenuItemClick(p0: MenuItem?): Boolean {
+                        when(p0!!.itemId){
+                            R.id.save_personal_details ->  Log.i(TAG,"Save Clicked")
+                            else -> return true
+
+                        }
+                        return true
+                    }
+                })
+            }
+        }
+        Log.i(TAG, me.size.toString())
+//       val item = me.
+//        item.title = "Savy"
 
         //initialise the view model
         viewModel = ViewModelProvider(this).get(PersonalSettingsViewModel::class.java)
@@ -101,15 +123,6 @@ class PersonalSettingsFragment : Fragment() {
             }).show()
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-        when (item.itemId) {
-            // R.id.save_personal_details
-
-        }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -124,7 +137,7 @@ class PersonalSettingsFragment : Fragment() {
             val imageUri = convertBitmapToUri(camBitmap)
             Log.i(TAG, camBitmap.toString())
             Picasso.get().load(imageUri).placeholder(R.drawable.ic_human_pic)
-                .error(R.drawable.ic_human_pic).centerCrop().into(mBinding.personalPicImageView)
+                .error(R.drawable.ic_human_pic).into(mBinding.personalPicImageView)
 
         }else if (requestCode == PICK_FILE_REQUEST_CODE && resultCode ==Activity.RESULT_OK){
             Log.i(TAG, "Mem: Result ok")

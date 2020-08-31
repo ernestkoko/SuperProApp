@@ -104,4 +104,15 @@ class HomeViewModel : ViewModel() {
     fun doneClickingLogout(){
         _isLogoutClicked.value = false
     }
+
+    private val _navigateToProductDetails = MutableLiveData<String>()
+    val navigateToProductDetails: LiveData<String>
+    get() = _navigateToProductDetails
+
+    fun onProductClicked(productId: String) {
+        _navigateToProductDetails.value = productId
+    }
+    fun onProductDetailsNavigated(){
+        _navigateToProductDetails.value = null
+    }
 }

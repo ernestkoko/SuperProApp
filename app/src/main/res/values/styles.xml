@@ -115,13 +115,19 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/dimen_24sp</item>
-        <item name="android:padding">@dimen/dp_16_dim</item>
+        <item name="android:padding">@dimen/three_dp</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:layout_marginStart">@dimen/margin_8dp</item>
         <item name="android:layout_marginEnd">@dimen/margin_8dp</item>
         <item name="android:layout_marginLeft">@dimen/margin_8dp</item>
         <item name="android:layout_marginRight">@dimen/margin_8dp</item>
         <item name="android:layout_marginTop">@dimen/dimen_24sp</item>
         <item name="android:background">@drawable/text_back</item>
+    </style>
+    <!-- Circle image view style-->
+    <style name="CircleImage" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 

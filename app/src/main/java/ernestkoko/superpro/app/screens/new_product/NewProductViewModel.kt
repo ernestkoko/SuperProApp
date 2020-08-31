@@ -18,6 +18,7 @@ class NewProductViewModel : ViewModel() {
     private val mAuth = FirebaseAuth.getInstance()
     private var mImageUri: Uri? = Uri.EMPTY
     private val mStorageRef = FirebaseStorage.getInstance().reference
+    private var mNodeKey: String? = null
 
     private val mUser = mAuth.currentUser
 
@@ -73,6 +74,11 @@ class NewProductViewModel : ViewModel() {
             //show dialog
             _showDialog.value = true
             _areFieldsEmpty.value = false
+
+            //push to the node and get the key
+            val pushNode =databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+            mNodeKey = pushNode.key
+            //check if the image uri is null or empty
             if (mImageUri != null && mImageUri != Uri.EMPTY) {
                 Log.i(TAG, "ImageUri is not null")
                 Log.i(TAG, "ImageUrl: ${mImageUri.toString()}")
@@ -93,16 +99,21 @@ class NewProductViewModel : ViewModel() {
 
                             val imageUri = task.result
                             Log.i(TAG, "ImageUpload Uri: ${imageUri.toString()}")
+//                            //insert the new product to firebase database
+//                            val pushNode =databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
+//                            mNodeKey = pushNode.key
+                            Log.i(TAG,"Push key is: ${ mNodeKey}")
+                            //product to insert into the firebase db
                             val product = Product(
+                                mNodeKey,
                                 productName.value!!.toString().trim(),
                                 quantity.value!!.toString().trim(),
                                 manufacturer.value!!.toString().trim(),
-                                imageUri.toString()
+                                imageUri.toString(),
                             )
                             Log.i(TAG, "Add Button: Clicked")
-                            //insert the new product to firebase database
-                            databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
-                                .setValue(product).addOnCompleteListener { task ->
+                            // finally inserting it into firebase db
+                                 pushNode.setValue(product).addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         Log.i(TAG, "Product: Inserted successfully")
                                         _wasProductInserted.value = true
@@ -131,14 +142,15 @@ class NewProductViewModel : ViewModel() {
             } else {
                 Log.i(TAG, "ImageUri: null")
                 val product = Product(
+                    mNodeKey,
                     productName.value!!.toString().trim(),
                     quantity.value!!.toString().trim(),
                     manufacturer.value!!.toString().trim()
                 )
+
                 Log.i(TAG, "Add Button: Clicked")
-                //insert the new product to friebase database
-                databaseRef.child("product").child(mAuth.currentUser!!.uid).push()
-                    .setValue(product).addOnCompleteListener { task ->
+                //insert the new product to firebase database
+                pushNode.setValue(product).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             Log.i(TAG, "Product: Inserted successfully")
                             _wasProductInserted.value = true

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
@@ -68,7 +69,11 @@ class HomeFragment : Fragment() {
 
         mBinding.recyclerView.layoutManager =
             LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
-        val adapter = HomeFragmentAdapter()
+        val adapter = HomeFragmentAdapter(ProductClickListener { productId ->
+           // Toast.makeText(context,"The id: ${productId}", Toast.LENGTH_LONG).show()
+            viewModel.onProductClicked(productId)
+
+        })
         mBinding.recyclerView.adapter = adapter
         //listen for when to navigate to new product fragment
         viewModel.navToNewProduct.observe(viewLifecycleOwner, Observer { navToNewproduct ->
@@ -93,9 +98,20 @@ class HomeFragment : Fragment() {
             // Handle the back button event
             popDialog()
         }
+
         viewModel.prod.observe(viewLifecycleOwner, Observer {
             it?.let {
                adapter.submitList(it)
+            }
+        })
+        //observe when to navigate to product details
+        viewModel.navigateToProductDetails.observe(viewLifecycleOwner, Observer {productId ->
+
+            productId?.let {
+                findNavController().navigate(HomeFragmentDirections
+                    .actionHomeFragmentToProductDetailsFragment(productId))
+                //notify the view model you have navigated
+                viewModel.onProductDetailsNavigated()
             }
         })
 

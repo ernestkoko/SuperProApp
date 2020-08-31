@@ -8,10 +8,12 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -55,11 +57,34 @@ class NewProductFragment : Fragment(), ChangePhotoDialog.OnPhotoReceivedListener
     ): View? {
         mBinding =
             DataBindingUtil.inflate(inflater, R.layout.new_product_fragment, container, false)
+        viewModel = ViewModelProvider(this).get(NewProductViewModel::class.java)
 
         //find nav controller
         val navController = findNavController()
-        mBinding.newProductToolBar.setupWithNavController(navController)
-        viewModel = ViewModelProvider(this).get(NewProductViewModel::class.java)
+        //get the toolbar
+        val toolBar = mBinding.newProductToolBar
+        //set the tool bar up with navController
+        toolBar.setupWithNavController(navController)
+        //get the menu from the toolBar
+        val menu = toolBar.menu
+
+        //iterate through the menu to get the items
+        menu.forEach {
+            item ->
+            item.setOnMenuItemClickListener(object :MenuItem.OnMenuItemClickListener{
+                override fun onMenuItemClick(p0: MenuItem?): Boolean {
+                    if (p0!!.itemId == R.id.save_personal_details){
+                        Log.i(TAG,"Save: Clicked")
+                        viewModel.onAddButtonClicked()
+                    }
+                    return true
+                }
+            })
+
+        }
+
+
+
         mBinding.newProductViewModel = viewModel
         //verify storage permission
         verifyStoragePermission()

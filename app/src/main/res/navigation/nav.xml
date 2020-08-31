@@ -94,6 +94,10 @@
         <action
             android:id="@+id/action_productDetailsFragment_to_edithProductFragment"
             app:destination="@id/editProductFragment" />
+        <argument
+            android:name="productId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/editProductFragment"
